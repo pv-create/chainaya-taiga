@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  chainaya-taiga:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    container_name: chainaya-taiga-app
+    environment:
+      - NODE_ENV=production
+    networks:
+      - chainaya-network
+
+networks:
+  chainaya-network:
+    driver: bridge
+
+volumes:
+  chainaya-data:
