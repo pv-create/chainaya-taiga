@@ -7,16 +7,28 @@ services:
       dockerfile: Dockerfile
     ports:
       - "80:80"
+      - "443:443"
     restart: unless-stopped
     container_name: chainaya-taiga-app
     environment:
       - NODE_ENV=production
+      - DOMAIN=chainaya-taiga.ru
+    volumes:
+      - ./nginx-ssl.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+      - ./logs:/var/log/nginx
     networks:
       - chainaya-network
+
+  # Certbot для автоматического SSL
+  certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - ./ssl:/etc/letsencrypt
+      - ./certbot-var:/var/lib/letsencrypt
+    command: certonly --webroot --webroot-path=/var/www/html --email admin@chainaya-taiga.ru --agree-tos --no-eff-email -d chainaya-taiga.ru -d www.chainaya-taiga.ru
 
 networks:
   chainaya-network:
     driver: bridge
-
-volumes:
-  chainaya-data:
