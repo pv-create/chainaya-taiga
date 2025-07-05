@@ -24,9 +24,6 @@ FROM nginx:alpine
 # Копирование собранного приложения из предыдущего этапа
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Копирование конфигурации nginx
-COPY nginx.conf /etc/nginx/nginx.conf
-
 # Открытие порта 80
 EXPOSE 80
 
